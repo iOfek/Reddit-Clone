@@ -1,0 +1,3 @@
+server/dump.rdb
+server/src/migrations/.snapshot-lireddit.json
+server/src/migrations/Migration20220901093407.ts
