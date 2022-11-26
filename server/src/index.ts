@@ -1,29 +1,27 @@
-import "reflect-metadata";
-import { __prod__ } from "./constants";
-import express from "express";
 import { ApolloServer } from "apollo-server-express";
+import connectRedis from "connect-redis";
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import ioredis from "ioredis";
+import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { COOKIE_NAME, __prod__ } from "./constants";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
-import ioredis from "ioredis";
-import session from "express-session";
-import connectRedis from "connect-redis";
+import { AppDataSource } from "./typeorm.config";
 import { MyContext } from "./types";
-import cors from "cors";
-import { MikroORM } from "@mikro-orm/core";
-import config from "./mikro-orm.config";
 const PORT = 4000;
+
 declare module "express-session" {
   interface SessionData {
     userId: number;
   }
 }
 const main = async () => {
-  // await Post.delete({})
-
-  const orm = await MikroORM.init(config);
-  orm.getMigrator().up();
+  // sendEmail("bob@bob.com", "hello bob");
+  const conn = await AppDataSource.initialize();
 
   const app = express();
 
@@ -47,14 +45,14 @@ const main = async () => {
 
   app.use(
     session({
-      name: "COOKIE_NAME",
+      name: COOKIE_NAME,
       store: new RedisStore({ client: redis, disableTouch: true }),
       saveUninitialized: false,
       cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
+        maxAge: 1000 * 60 * 60 * 24 * 12, //2 weeks
         httpOnly: true,
-        sameSite: "none",
-        secure: true,
+        sameSite: "lax", // sets cookie from frontend localhost:3000
+        secure: false, // sets cookie from frontend localhost:3000
       },
       secret: "shhhhdonttell",
       resave: false,
@@ -67,9 +65,9 @@ const main = async () => {
       validate: false,
     }),
     context: ({ req, res }): MyContext => ({
-      em: orm.em.fork(),
       req,
       res,
+      redis,
     }),
   });
 

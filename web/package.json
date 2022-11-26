@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "gen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",
@@ -11,18 +12,30 @@
     "@chakra-ui/theme-tools": "^2.0.2",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.9.0",
+    "@urql/exchange-graphcache": "^5.0.1",
     "formik": "^2.2.9",
     "framer-motion": "^6.3.0",
     "graphql": "^16.6.0",
+    "isomorphic-unfetch": "^3.1.0",
     "next": "latest",
+    "next-urql": "^4.0.0",
+    "nodemailer": "^6.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "urql": "^3.0.2"
+    "react-is": "^18.2.0",
+    "urql": "^3.0.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.12.0",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-operations": "2.5.3",
+    "@graphql-codegen/typescript-urql": "^3.7.0",
     "@types/node": "^18.0.0",
+    "@types/nodemailer": "^6.4.6",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/uuid": "^8.3.4",
     "typescript": "^4.7.2"
   }
 }
